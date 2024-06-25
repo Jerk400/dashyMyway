@@ -25,7 +25,7 @@ COPY . ./
 RUN yarn build --mode production --no-clean
 
 # Production stage
-FROM node:20.11.1-alpine3.19
+FROM node:20.15-alpine3.19
 
 # Define some ENV Vars
 ENV PORT=8080 \
