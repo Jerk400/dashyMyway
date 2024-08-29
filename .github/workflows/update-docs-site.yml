@@ -20,23 +20,33 @@ on:
 # 4. Copy /docs from master to website branch
 # 5. Run the script which processes documentation
 # 6. Commit and push updated docs to the website source code branch
+permissions:
+  contents: read
+
 jobs:
   update-docs:
+    permissions:
+      contents: write  # for Git to git push
     runs-on: ubuntu-latest
     steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@5c7944e73c4c2a096b17a9cb74d65b6c2bbafbde # v2.9.1
+        with:
+          egress-policy: audit
+
       - name: Checkout master branch 🛎️
-        uses: actions/checkout@v2
+        uses: actions/checkout@ee0669bd1cc54295c223e0bb666b733df41de1c5 # v2.7.0
         with:
           path: 'master-docs'
 
       - name: Checkout WEBSITE/docs-site-source branch 🛎️
-        uses: actions/checkout@v2
+        uses: actions/checkout@ee0669bd1cc54295c223e0bb666b733df41de1c5 # v2.7.0
         with:
           ref: 'WEBSITE/docs-site-source'
           path: 'website-docs'
 
       - name: Install Python 🐍
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@e9aba2c848f5ebd159c070c61ea2c4e2b122355e # v2.3.4
         with:
           python-version: '3.x'
 

@@ -8,7 +8,12 @@ jobs:
     runs-on: ubuntu-latest
     if: (!contains(github.actor, '[bot]')) # Exclude bot comment
     steps:
-      - uses: ddradar/choose-random-action@v1
+      - name: Harden Runner
+        uses: step-security/harden-runner@5c7944e73c4c2a096b17a9cb74d65b6c2bbafbde # v2.9.1
+        with:
+          egress-policy: audit
+
+      - uses: ddradar/choose-random-action@763d5339b1a0468e874d871e73716cc6a78000cc # v1.0.9
         id: act
         with:
           contents: |
@@ -21,7 +26,7 @@ jobs:
             https://media3.giphy.com/media/5DQdk5oZzNgGc/giphy.gif
             https://media4.giphy.com/media/3o7abB06u9bNzA8lu8/giphy.gif
             https://media4.giphy.com/media/l2JJrEx9aRsjNruhi/giphy.gif
-      - uses: ddradar/lgtm-action@v1
+      - uses: ddradar/lgtm-action@4f12c25d7b40f03e803cbb7f0485a1bcf14bc129 # v1.3.4
         with:
           image-url: ${{ steps.act.outputs.selected }}
           token: ${{ secrets.BOT_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}

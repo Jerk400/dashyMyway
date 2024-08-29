@@ -10,7 +10,12 @@ jobs:
   generate-contributors:
     runs-on: ubuntu-latest
     steps:
-      - uses: bubkoo/contributors-list@v1
+      - name: Harden Runner
+        uses: step-security/harden-runner@5c7944e73c4c2a096b17a9cb74d65b6c2bbafbde # v2.9.1
+        with:
+          egress-policy: audit
+
+      - uses: bubkoo/contributors-list@b9e91f91a51a55460fdcae64daad0cb8122cdd53 # v1.1.0
         with:
           GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
           svgPath: docs/assets/CONTRIBUTORS.svg
@@ -25,15 +30,20 @@ jobs:
   insert-sponsors:
     runs-on: ubuntu-latest
     steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@5c7944e73c4c2a096b17a9cb74d65b6c2bbafbde # v2.9.1
+        with:
+          egress-policy: audit
+
       - name: Checkout 🛎️
-        uses: actions/checkout@v2
+        uses: actions/checkout@ee0669bd1cc54295c223e0bb666b733df41de1c5 # v2.7.0
       - name: Generate Sponsors in Readme 💖
-        uses: JamesIves/github-sponsors-readme-action@1.0.5
+        uses: JamesIves/github-sponsors-readme-action@df44e2a5686dc94a4ee26bee756da7a73ccf3a0c # 1.0.5
         with:
           token: ${{ secrets.BOT_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
           file: 'README.md'
       - name: Generate Sponsors in Credits 💖
-        uses: JamesIves/github-sponsors-readme-action@1.0.5
+        uses: JamesIves/github-sponsors-readme-action@df44e2a5686dc94a4ee26bee756da7a73ccf3a0c # 1.0.5
         with:
           token: ${{ secrets.BOT_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
           file: 'docs/credits.md'
@@ -42,8 +52,13 @@ jobs:
     runs-on: ubuntu-latest
     name: Inserts contributors into credits.md
     steps:
+    - name: Harden Runner
+      uses: step-security/harden-runner@5c7944e73c4c2a096b17a9cb74d65b6c2bbafbde # v2.9.1
+      with:
+        egress-policy: audit
+
     - name: Contributer List - Credits Page
-      uses: akhilmhdh/contributors-readme-action@v2.3.6
+      uses: akhilmhdh/contributors-readme-action@098389139f2fabed92e52606268941dbff381edb # v2.3.6
       env:
           GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
       with:
@@ -55,7 +70,7 @@ jobs:
         committer_username: liss-bot
         committer_email: liss-bot@d0h.co
     - name: Sponsors List - Readme
-      uses: akhilmhdh/contributors-readme-action@v2.2
+      uses: akhilmhdh/contributors-readme-action@697368357571d95fdf3d88edc0daac86ca4ee8a5 # v2.2
       env:
           GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
       with:

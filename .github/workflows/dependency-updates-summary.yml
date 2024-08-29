@@ -6,10 +6,15 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@5c7944e73c4c2a096b17a9cb74d65b6c2bbafbde # v2.9.1
+        with:
+          egress-policy: audit
+
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@ee0669bd1cc54295c223e0bb666b733df41de1c5 # v2.7.0
       - name: Yarn Lock Changes
-        uses: Simek/yarn-lock-changes@main
+        uses: Simek/yarn-lock-changes@5b249bcbb9794145fefa43a2a8330b884697e40f # main
         with:
           token: ${{ secrets.BOT_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
           collapsibleThreshold: '25'

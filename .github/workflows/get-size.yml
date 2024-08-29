@@ -2,15 +2,23 @@
 # And also labels the PR based on the number of lines changes
 name: 🌈 Check PR Size
 on: [pull_request]
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+    - name: Harden Runner
+      uses: step-security/harden-runner@5c7944e73c4c2a096b17a9cb74d65b6c2bbafbde # v2.9.1
+      with:
+        egress-policy: audit
+
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@ee0669bd1cc54295c223e0bb666b733df41de1c5 # v2.7.0
     # Find and comment with compressed size
     - name: Get Compressed Size
-      uses: preactjs/compressed-size-action@v2
+      uses: preactjs/compressed-size-action@f780fd104362cfce9e118f9198df2ee37d12946c # v2
       with:
         repo-token: ${{ secrets.BOT_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
         pattern: './dist/**/*.{js,css,html}'
@@ -19,7 +27,7 @@ jobs:
         minimum-change-threshold: 100
     # Check number of lines of code added
     - name: Label based on Lines of Code
-      uses: codelytv/pr-size-labeler@v1
+      uses: codelytv/pr-size-labeler@56f6f0fc35c7cc0f72963b8467729e1120cb4bed # v1.10.0
       with:
         GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
         xs_max_size: '10'

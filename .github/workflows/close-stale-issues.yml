@@ -4,13 +4,21 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '0 1 * * *' # Run at 01:00 each day
+permissions:
+  contents: read
+
 jobs:
   stale:
     runs-on: ubuntu-latest
     steps:
       # Comment on, then close issues that haven't been updated for ages 
+      - name: Harden Runner
+        uses: step-security/harden-runner@5c7944e73c4c2a096b17a9cb74d65b6c2bbafbde # v2.9.1
+        with:
+          egress-policy: audit
+
       - name: Close Stale Issues
-        uses: actions/stale@v4
+        uses: actions/stale@a20b814fb01b71def3bd6f56e7494d667ddf28da # v4.1.1
         with:
           repo-token: ${{ secrets.BOT_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
           days-before-stale: 360
@@ -38,7 +46,7 @@ jobs:
           
         # Comment on, then close issues that required a response from the user, but didn't get one
       - name: Close Issues without Response
-        uses: actions/stale@v4
+        uses: actions/stale@a20b814fb01b71def3bd6f56e7494d667ddf28da # v4.1.1
         with:
           repo-token: ${{ secrets.BOT_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
           days-before-stale: 5
@@ -58,7 +66,7 @@ jobs:
           
         # Comment on issues that I should have replied to
       - name: Notify Repo Owner to Respond
-        uses: actions/stale@v4
+        uses: actions/stale@a20b814fb01b71def3bd6f56e7494d667ddf28da # v4.1.1
         with:
           repo-token: ${{ secrets.BOT_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
           days-before-stale: 7

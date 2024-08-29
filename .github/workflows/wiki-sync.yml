@@ -4,14 +4,22 @@ on:
   workflow_dispatch: # Manual dispatch
   schedule:
     - cron: '0 1 * * 0' # At 01:00 on Sunday.
+permissions:
+  contents: read
+
 jobs:
   update-wiki:
     runs-on: ubuntu-latest
     steps:
+    - name: Harden Runner
+      uses: step-security/harden-runner@5c7944e73c4c2a096b17a9cb74d65b6c2bbafbde # v2.9.1
+      with:
+        egress-policy: audit
+
     - name: Checkout
-      uses: actions/checkout@master        
+      uses: actions/checkout@61b9e3751b92087fd0b06925ba6dd6314e06f089 # master        
     - name: Upload Docs to GH Wiki
-      uses: docker://decathlon/wiki-page-creator-action:latest
+      uses: docker://decathlon/wiki-page-creator-action:latest@sha256:77ffd8d45533a3c558911d1f30eb1135a16409ba011e08d5670990304687255a
       env:
         GH_PAT: ${{ secrets.BOT_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
         ACTION_MAIL: alicia-gh-bot@mail.as93.net

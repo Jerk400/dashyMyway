@@ -4,13 +4,21 @@ name: 🎯 Add/ Remove Awaiting Response Labels
 on:
   issue_comment:
     types: [created]
+permissions:
+  contents: read
+
 jobs:
   remove-stale:
    runs-on: ubuntu-latest
    if: ${{ github.event.comment.author_association != 'COLLABORATOR' && github.event.comment.author_association != 'OWNER' }}
    steps:
+   - name: Harden Runner
+     uses: step-security/harden-runner@5c7944e73c4c2a096b17a9cb74d65b6c2bbafbde # v2.9.1
+     with:
+       egress-policy: audit
+
    - name: Remove Stale labels when Updated
-     uses: actions-cool/issues-helper@v2
+     uses: actions-cool/issues-helper@a4367f11ada25af22aa188cb0bc81143b3569193 # v2.5.0
      with:
       actions: remove-labels
       token: ${{ secrets.BOT_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
@@ -21,8 +29,13 @@ jobs:
    runs-on: ubuntu-latest
    if: ${{!github.event.issue.pull_request && github.event.comment.author_association != 'COLLABORATOR' && github.event.comment.author_association != 'OWNER' && github.event.issue.state == 'open' }}
    steps:
+   - name: Harden Runner
+     uses: step-security/harden-runner@5c7944e73c4c2a096b17a9cb74d65b6c2bbafbde # v2.9.1
+     with:
+       egress-policy: audit
+
    - name: Add Awaiting Author labels when Updated
-     uses: actions-cool/issues-helper@v2
+     uses: actions-cool/issues-helper@a4367f11ada25af22aa188cb0bc81143b3569193 # v2.5.0
      with:
       actions: add-labels
       token: ${{ secrets.BOT_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
@@ -33,8 +46,13 @@ jobs:
    runs-on: ubuntu-latest
    if: ${{ github.event.comment.author_association == 'OWNER' }}
    steps:
+   - name: Harden Runner
+     uses: step-security/harden-runner@5c7944e73c4c2a096b17a9cb74d65b6c2bbafbde # v2.9.1
+     with:
+       egress-policy: audit
+
    - name: Remove Awaiting Author labels when Updated
-     uses: actions-cool/issues-helper@v2
+     uses: actions-cool/issues-helper@a4367f11ada25af22aa188cb0bc81143b3569193 # v2.5.0
      with:
       actions: remove-labels
       token: ${{ secrets.BOT_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}

@@ -9,8 +9,13 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/WEBSITE/docs-site-source'
     steps:
-      - uses: actions/checkout@master
-      - uses: redkubes/docusaurus-deploy-action@v1
+      - name: Harden Runner
+        uses: step-security/harden-runner@5c7944e73c4c2a096b17a9cb74d65b6c2bbafbde # v2.9.1
+        with:
+          egress-policy: audit
+
+      - uses: actions/checkout@61b9e3751b92087fd0b06925ba6dd6314e06f089 # master
+      - uses: redkubes/docusaurus-deploy-action@e3c1d7f8732f8790ea45ac7ded561a8535bdbe13 # v1
         with:
           source-folder: ./
           git-user: ${{ github.actor }}
